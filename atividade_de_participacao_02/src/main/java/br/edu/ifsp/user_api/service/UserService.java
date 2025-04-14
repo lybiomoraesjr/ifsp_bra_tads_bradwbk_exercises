@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import br.edu.ifsp.user_api.dto.CreateUserDTO;
 import br.edu.ifsp.user_api.model.User;
 import br.edu.ifsp.user_api.repository.UserRepository;
 
@@ -13,11 +15,28 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public List<User> getUserList(){
+    public List<User> getUserList() {
         return userRepository.getAllUsers();
     }
 
-    public User getUserById(int id){
+    public User getUserById(int id) {
         return userRepository.getUserById(id);
+    }
+
+    public User createUser(CreateUserDTO dto) {
+        User user = new User();
+        user.setId(generateNewId());
+        user.setLogin(dto.getLogin());
+        user.setPassword(dto.getPassword());
+        userRepository.save(user);
+
+        return user;
+    }
+
+    private int generateNewId() {
+        return userRepository.getAllUsers().stream()
+                .mapToInt((user) -> user.getId())
+                .max()
+                .orElse(0) + 1;
     }
 }
