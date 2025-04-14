@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,9 +47,9 @@ public class UserController {
         User newUser = userService.createUser(dto);
 
         return ResponseEntity
-        .created(URI.create("/api/user/" + newUser.getId()))
-        .body(newUser);
-    
+                .created(URI.create("/api/user/" + newUser.getId()))
+                .body(newUser);
+
     }
 
     @PutMapping("user/{id}")
@@ -60,6 +61,17 @@ public class UserController {
 
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("user/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable int id) {
+        User deletedUser = userService.deleteUser(id);
+
+        if (deletedUser != null) {
+            return ResponseEntity.ok(deletedUser);
         } else {
             return ResponseEntity.notFound().build();
         }

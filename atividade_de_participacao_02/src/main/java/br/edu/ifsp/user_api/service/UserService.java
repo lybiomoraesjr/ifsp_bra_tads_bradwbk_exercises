@@ -46,6 +46,17 @@ public class UserService {
         return existingUser;
     }
 
+    public User deleteUser(int id) {
+        User user = userRepository.getUserById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        userRepository.deleteById(id);
+        return user;
+    }
+
     private int generateNewId() {
         return userRepository.getAllUsers().stream()
                 .mapToInt((user) -> user.getId())

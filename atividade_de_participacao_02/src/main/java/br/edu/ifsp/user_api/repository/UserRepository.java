@@ -29,4 +29,9 @@ public class UserRepository {
     public void save(User user) {
         uDataSource.add(user);
     }
+
+    public void deleteById(int id) {
+        List<User> users = getAllUsers();
+        users.removeIf(u -> u.getId() == id);
+    }
 }
