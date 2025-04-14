@@ -24,13 +24,26 @@ public class UserService {
     }
 
     public User createUser(CreateUserDTO dto) {
-        User user = new User();
-        user.setId(generateNewId());
-        user.setLogin(dto.getLogin());
-        user.setPassword(dto.getPassword());
-        userRepository.save(user);
+        User newUser = new User();
+        newUser.setId(generateNewId());
+        newUser.setLogin(dto.getLogin());
+        newUser.setPassword(dto.getPassword());
+        userRepository.save(newUser);
 
-        return user;
+        return newUser;
+    }
+
+    public User updateUser(int id, CreateUserDTO dto) {
+        User existingUser = userRepository.getUserById(id);
+
+        if (existingUser == null) {
+            return null;
+        }
+
+        existingUser.setLogin(dto.getLogin());
+        existingUser.setPassword(dto.getPassword());
+
+        return existingUser;
     }
 
     private int generateNewId() {
